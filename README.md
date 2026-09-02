@@ -13,3 +13,8 @@ github原版：https://github.com/tangsanli5201/DeepPCB
 
 ### 3.AI提示词追溯
 创建`prompt/`目录，每个开发阶段把和AI交互记录保存为json文件，上下文压缩前完成备份，随版本提交到git仓库。当前阶段文件：`prompt/stage3_data_prepare.json`
+## 数据准备阶段说明
+1. 原始测试样本目录：`data/test_imgs`，共3‑5张PCB缺陷图片
+2. 图像预处理结果输出目录：`data/processed`
+3. 本阶段完成操作：图像灰度化预处理
+4. 后续模型训练使用公开数据集 DeepPCB
