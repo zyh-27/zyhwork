@@ -1,4 +1,5 @@
-path: ../DeepPCB-master/PCBData
+# DeepPCB 数据集（已转换为 YOLO 格式）
+path: D:/ZYH/zyhwork/data/yolo
 train: images/train
 val: images/val
 names:

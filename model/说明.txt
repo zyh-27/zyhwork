@@ -1,4 +1,6 @@
 best.pt 为模型训练完成后生成的最优权重文件。
 本项目使用 DeepPCB 数据集训练，训练命令：python src/train.py
-受本机硬件及数据集格式限制，完整训练需在算力设备执行。
-演示阶段使用 YOLOv8n 官方预训练权重进行推理测试。
+数据转换：DeepPCB 原始标注经 convert_to_yolo.py 转换为 YOLO 格式，转换后数据位于 data/yolo/（1000 训练 + 500 验证）
+训练配置：src/dataset.yaml，已完成 10 轮 CPU 训练，验证集 mAP50 = 0.91
+推理：python src/detect.py（优先加载本权重，回退 yolov8n.pt 官方预训练权重）
+Web 界面：python src/app.py（优先加载本权重）

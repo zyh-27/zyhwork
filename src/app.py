@@ -4,7 +4,10 @@ import os
 
 # 项目根目录（本文件位于 src/ 下），确保从任意位置运行都能找到权重
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-model = YOLO(os.path.join(BASE_DIR, "yolov8n.pt"))
+
+# 优先加载训练生成的自训权重 model/best.pt，不存在时回退官方预训练权重
+best_pt = os.path.join(BASE_DIR, "model", "best.pt")
+model = YOLO(best_pt if os.path.exists(best_pt) else os.path.join(BASE_DIR, "yolov8n.pt"))
 
 def detect(img):
     res = model.predict(img, save=False)

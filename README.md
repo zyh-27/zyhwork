@@ -18,13 +18,13 @@ github原版：https://github.com/tangsanli5201/DeepPCB
 ### 1. 算法选型
 采用YOLOv8n轻量化目标检测模型完成PCB缺陷检测。YOLOv8n参数量约3.2M，Anchor-Free解耦头设计，兼顾检测精度与CPU推理实时性，官方提供预训练权重，适合课程设计阶段快速验证完整检测流程。
 
-### 2. 模型训练说明
-- DeepPCB原始数据以Matlab格式保存缺陷标注（open/short/mousebite/spur/copper/pinhole六类），需先转换为YOLO格式后执行训练：按`images/train`、`images/val`、`labels`目录组织数据，标签转为归一化txt文件。
+### 2. 数据集格式转换与模型训练说明
+- DeepPCB原始数据以txt格式保存缺陷标注（open/short/mousebite/spur/copper/pinhole六类，类别1-6），经`convert_to_yolo.py`转换为YOLO格式（类别0-5，归一化坐标），转换后数据组织为`data/yolo/images/{train,val}`与`data/yolo/labels/{train,val}`，共1000张训练、500张验证。
 - 训练命令：`python src/train.py`（配置见`src/dataset.yaml`）
-- 受本机硬件（CPU）及数据集格式限制，完整50轮训练需在具备算力设备上执行，训练完成后生成的最优权重为`model/best.pt`。
+- 已在CPU环境完成10轮训练，验证集指标：mAP50=0.91、mAP50-95=0.661，六类缺陷识别率0.709~0.977，最优权重`model/best.pt`。
 
 ### 3. 推理演示
-演示阶段使用YOLOv8n官方预训练权重（`yolov8n.pt`）对`data/test_imgs/`测试样本执行缺陷检测，验证数据加载、模型推理、结果保存完整链路。运行命令：`python src/detect.py`，检测效果图自动保存至`runs/detect/predict`并复制归档到`result/`目录。
+推理脚本`python src/detect.py`优先加载自训权重`model/best.pt`（不存在时回退官方预训练权重`yolov8n.pt`），对`data/test_imgs/`测试样本执行缺陷检测，检测效果图保存至`runs/detect/predict`并复制归档到`result/`目录，缺陷框标注类别与置信度（如`open 0.88`、`short 0.81`）。
 
 ### 4. AI提示词追溯
 第四阶段AI交互记录归档文件：`prompt/stage4_pcb_chat.json`
@@ -35,8 +35,8 @@ github原版：https://github.com/tangsanli5201/DeepPCB
 
 ### 2. 界面功能
 - 图片上传组件：`gr.Image(type="numpy")`，将上传图片解析为numpy数组供YOLO直接推理
-- 缺陷检测：调用YOLOv8n预训练权重实时推理，返回`res[0].plot()`带框标注结果图
-- 结果展示：`gr.Image`组件渲染缺陷检测效果图
+- 缺陷检测：调用自训权重（`model/best.pt`，缺失时回退`yolov8n.pt`）实时推理，返回`res[0].plot()`带框标注结果图
+- 结果展示：`gr.Image`组件渲染缺陷检测效果图，标注open/short/mousebite/spur/copper/pinhole六类缺陷及置信度
 
 ### 3. 运行方式
 ```bash
@@ -45,7 +45,7 @@ python src/app.py
 浏览器打开 `http://127.0.0.1:7860`，上传PCB图片即可查看缺陷检测结果。
 
 ### 4. 验证结果
-浏览器实测上传测试样本（`data/test_imgs/04.JPG`），成功完成检测并展示结果，Web界面截图归档：`result/web_demo_04.png`
+浏览器实测上传缺陷样本（`data/test_imgs/90100009.jpg`等），成功检测并标注open/short/copper/pinhole/spur等缺陷，Web界面截图归档：`result/web_demo_04.png`，自训权重检测效果图归档：`result/90100009.jpg`等
 
 ### 5. AI提示词追溯
 第五阶段AI交互记录归档文件：`prompt/stage5_pcb_chat.json`

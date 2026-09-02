@@ -4,6 +4,7 @@ __pycache__/
 
 # 模型权重文件（可重新下载或训练生成）
 *.pt
+!model/best.pt
 
 # YOLO 训练产物
 runs/
@@ -24,3 +25,9 @@ Thumbs.db
 # 大体积原始数据集（本地留存，不上传仓库）
 data/raw/
 *.zip
+
+# 转换后的 YOLO 数据集（体积大，可通过 convert_to_yolo.py 重新生成）
+data/yolo/
+
+# gradio 运行临时文件
+.gradio/
