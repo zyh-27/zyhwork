@@ -1,0 +1,26 @@
+# Python 缓存
+__pycache__/
+*.py[cod]
+
+# 模型权重文件（可重新下载或训练生成）
+*.pt
+
+# YOLO 训练产物
+runs/
+
+# 虚拟环境
+.env
+venv/
+.venv/
+
+# IDE 配置
+.vscode/
+.idea/
+
+# 系统文件
+Thumbs.db
+.DS_Store
+
+# 大体积原始数据集（本地留存，不上传仓库）
+data/raw/
+*.zip
