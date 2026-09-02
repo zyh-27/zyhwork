@@ -28,3 +28,24 @@ github原版：https://github.com/tangsanli5201/DeepPCB
 
 ### 4. AI提示词追溯
 第四阶段AI交互记录归档文件：`prompt/stage4_pcb_chat.json`
+
+## 第五阶段：Web可视化界面阶段
+### 1. 技术选型
+采用Gradio轻量级机器学习演示框架构建Web可视化界面，底层由FastAPI驱动，支持上传图片、实时推理、结果可视化，无需单独开发前后端，适合课程设计快速验证。
+
+### 2. 界面功能
+- 图片上传组件：`gr.Image(type="numpy")`，将上传图片解析为numpy数组供YOLO直接推理
+- 缺陷检测：调用YOLOv8n预训练权重实时推理，返回`res[0].plot()`带框标注结果图
+- 结果展示：`gr.Image`组件渲染缺陷检测效果图
+
+### 3. 运行方式
+```bash
+python src/app.py
+```
+浏览器打开 `http://127.0.0.1:7860`，上传PCB图片即可查看缺陷检测结果。
+
+### 4. 验证结果
+浏览器实测上传测试样本（`data/test_imgs/04.JPG`），成功完成检测并展示结果，Web界面截图归档：`result/web_demo_04.png`
+
+### 5. AI提示词追溯
+第五阶段AI交互记录归档文件：`prompt/stage5_pcb_chat.json`
